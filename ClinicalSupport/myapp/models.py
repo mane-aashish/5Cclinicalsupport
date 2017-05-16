@@ -7,7 +7,7 @@ from django.db import models
 class clinicUserProfile(models.Model):
 	uid = models.CharField(max_length = 50)
 	smokingHistory = models.BooleanField(default=False)
-	allergies = models.CharField(max_length = 50)
+	allergies = models.CharField(max_length = 50, default="NULL")
 	cough = models.BooleanField(default=False)
 	fever = models.BooleanField(default=False)
 	hemoptysis = models.BooleanField(default=False)
