@@ -5,7 +5,7 @@ from django.db import models
 
 # Create your models here.
 class clinicUserProfile(models.Model):
-	uid = models.CharField(max_length = 50)
+	uid = models.CharField(max_length = 50, primary_key=True)
 	smokingHistory = models.CharField(max_length = 1, default="N")
 	allergies = models.CharField(max_length = 50, blank=True)
 	cough = models.CharField(max_length = 1, default="N")
