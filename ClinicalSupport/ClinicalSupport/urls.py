@@ -20,7 +20,8 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^clinic/', storeClinicInfo),
+    url(r'^chest/clinic/(?P<rid>\w+)', startup),
+    url(r'^chest/clinic/response', storeClinicInfo),
 
 ]
 

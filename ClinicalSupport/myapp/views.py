@@ -11,35 +11,40 @@ from django.http import HttpResponse
 # Importing models
 from models import clinicUserProfile
 
+# Universal ID
+uid = 0;
+
 # Create your views here.
-def startup(request, uid):
+def startup(request, rid):
 	response = render(request, "clinic.html")
+	request.session['uid'] = rid
+	print "UID = " + request.session['uid']
 	return response
 
 def storeClinicInfo(request):
 	
-	if request.method == 'GET':
-		response = render(request, "clinic.html")
-		return response
-
-
 	if request.method == 'POST':
-		uid = "123456"
-		smokingHistory = request.POST['smoking']
+		smokingHistory = request.POST.get('smoking', 'N')
 		allergies = request.POST['allergies']
-		cough = request.POST['cough']
-		fever = request.POST['fever']
-		hemoptysis = request.POST['hemoptysis']
-		breathlessness = request.POST['breathlessness']
-		skinrash = request.POST['skinrash']
-		tb = request.POST['tb']
-		cvd = request.POST['cvd']
-		sinusitis = request.POST['sinusitis']
-		asthma = request.POST['asthma']
-		dm = request.POST['dm']
+		cough = request.POST.get('cough', 'N')
+		fever = request.POST.get('fever', 'N')
+		hemoptysis = request.POST.get('hemoptysis','N')
+		breathlessness = request.POST.get('breathlessness','N')
+		skinrash = request.POST.get('skinrash','N')
+		tb = request.POST.get('tb', 'N')
+		cvd = request.POST.get('cvd', 'N')
+		sinusitis = request.POST.get('sinusitis', 'N')
+		asthma = request.POST.get('asthma', 'N')
+		dm = request.POST.get('dm', 'N')
+		hiv = request.POST.get('hiv', 'N')
+		uniqueID = str(request.session['uid'])
+		print "Unique ID = " + uniqueID
 
-		userProfile = clinicUserProfile.objects.create(uid=uid, smokingHistory=smokingHistory, allergies=allergies, cough=cough, fever=fever, hemoptysis=hemoptysis, breathlessness=breathlessness, skinrash=skinrash, tb=tb, cvd=cvd, sinusitis=sinusitis, asthma=asthma, dm=dm, hiv=hiv)
+		userProfile = clinicUserProfile.objects.create(uid=uniqueID, smokingHistory=smokingHistory, allergies=allergies, cough=cough, fever=fever, hemoptysis=hemoptysis, breathlessness=breathlessness, skinrash=skinrash, tb=tb, cvd=cvd, sinusitis=sinusitis, asthma=asthma, dm=dm, hiv=hiv)
 		userProfile.save()
+
+		response = render(request, "thanks.html")
+		return response
 
 
 
