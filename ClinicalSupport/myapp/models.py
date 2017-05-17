@@ -23,5 +23,35 @@ class clinicUserProfile(models.Model):
 	def __unicode__(self):
 		return self.uid
 
+
+class radioUserProfileChest(models.Model):
+	uid = models.CharField(max_length = 50, primary_key=True)
+	honeycombing = models.CharField(max_length = 1, default="N")
+	septal = models.CharField(max_length = 15, default="NULL")
+	groundGlass = models.CharField(max_length = 15, default="NULL")
+	consolidation = models.CharField(max_length = 25, default="NULL")
+	fibrosis = models.CharField(max_length = 15, default="NULL")
+	nodules = models.CharField(max_length = 15, default="NULL")
+	massLesion = models.CharField(max_length = 1, default="N")
+	treeInBudLesion = models.CharField(max_length = 1, default="N")
+	airTrapping = models.CharField(max_length = 1, default="N")
+	mosaicAttenuation = models.CharField(max_length = 1, default="N")
+	bronchiectasis = models.CharField(max_length = 15, default="NULL")
+	cavity = models.CharField(max_length = 15, default="NULL")
+	cysts = models.CharField(max_length = 15, default="NULL")
+	emphysema = models.CharField(max_length = 1, default="N")
+	lymphNodes = models.CharField(max_length = 15, default="NULL")
+	pleuralEffusion = models.CharField(max_length = 1, default="N")
+	pleuralThickening = models.CharField(max_length = 15, default="NULL")
+	crazyPaving = models.CharField(max_length = 1, default="N")
+	haloSign = models.CharField(max_length = 1, default="N")
+	reverseHalo = models.CharField(max_length = 1, default="N")
+	fat = models.CharField(max_length = 1, default="N")
+	heart = models.CharField(max_length = 15, default="NULL")
+
+	def __unicode__(self):
+		return self.uid
+
+
 	
 

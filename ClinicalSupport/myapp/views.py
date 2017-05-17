@@ -11,7 +11,7 @@ import string
 
 
 # Importing models
-from models import clinicUserProfile
+from models import *
 
 
 # Create your views here.
@@ -52,8 +52,48 @@ def viewChestClinicInfo(request, rid):
 	if request.method == 'GET':
 		request.session['radio-uid'] = str(rid)
 		patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])	
-		patientDetails = {'smokingHistory': patientProfile.smokingHistory, 'allergies': patientProfile.allergies, 'cough': patientProfile.cough, 'fever': patientProfile.fever}
+		patientDetails = {'smokingHistory': patientProfile.smokingHistory, 'allergies': patientProfile.allergies, 'cough': patientProfile.cough, 'fever': patientProfile.fever, 'hemoptysis':patientProfile.hemoptysis, 'breathlessness':patientProfile.breathlessness, 'skinrash':patientProfile.skinrash, 'tb':patientProfile.tb, 'cvd':patientProfile.cvd, 'sinusitis':patientProfile.sinusitis, 'asthma':patientProfile.asthma, 'dm':patientProfile.dm, 'hiv':patientProfile.hiv}
 		return render(request, 'radio-chest.html',{'patientDetails': patientDetails})
+
+	if request.method == 'POST':
+		honeycombing = request.POST.get('honeycombing', 'N')
+		septal = request.POST.get('septal', "NULL")
+		groundGlass = request.POST.get('groundGlass', "NULL")
+		consolidation = request.POST.get('consolidation', "NULL")
+		fibrosis = request.POST.get('fibrosis', "NULL")
+		nodules = request.POST.get('nodules', "NULL")
+		massLesion = request.POST.get('massLesion', "N")
+		treeInBudLesion = request.POST.get('treeInBudLesion', "N")
+		airTrapping = request.POST.get('airTrapping', "N")
+		mosaicAttenuation = request.POST.get('mosaicAttenuation', "N")
+		bronchiectasis = request.POST.get('bronchiectasis', "NULL")
+		cavity = request.POST.get('cavity', "NULL")
+		cysts = request.POST.get('cysts', "NULL")
+		emphysema = request.POST.get('emphysema', "N")
+		lymphNodes = request.POST.get('lymphNodes', "NULL")
+		pleuralEffusion = request.POST.get('pleuralEffusion', "N")
+		pleuralThickening = request.POST.get('pleuralThickening', "NULL")
+		crazyPaving = request.POST.get('crazyPaving', "N")
+		haloSign = request.POST.get('haloSign', "N")
+		reverseHalo = request.POST.get('reverseHalo', "N")
+		fat = request.POST.get('fat', "N")
+		heart = request.POST.get('heart', "NULL")
+		uniqueID = request.session['radio-uid']
+
+		userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidation, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
+		userProfile.save()
+
+		response = render(request, "thanks.html")
+		return response
+
+
+
+
+
+
+
+
+
 
 
 
