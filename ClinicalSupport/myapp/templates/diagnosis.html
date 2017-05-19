@@ -70,7 +70,7 @@
 	
 	<div class = "row" name = "possibleDiagnosis">
 			
-		<div class = "col-xs-6"  style="margin-left:50px;">
+<!-- 		<div class = "col-xs-6"  style="margin-left:50px;">
 	
 			{% if possibleDiagnosis  %}
 		
@@ -90,8 +90,32 @@
 
 			{% endif %}
 
-			</div>
-		</div>
+			</div> -->
+
+		<div class = "col-xs-6"  style="margin-left:50px;">
+			{% if possibleDiagnosis  %}
+				<h4> Possible Diagnosis </h4>
+				<table class = "table">
+					<thead>
+						<tr>
+							<th> Disease </th>
+							<th> Symptoms </th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for item in  possibleDiagnosis %}
+							<tr>
+								<td> {{item.disease}} </td>
+								<td> {{item.symptoms}} </td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% else %}
+				<h2> Inconclusive Diagnosis </h2>
+			{% endif %}				
+		</div>	
+	</div>
 
 	<!-- Modal to display diagnosis -->
 	<div id="modal" class="modal">
