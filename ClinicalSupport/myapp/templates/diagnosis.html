@@ -50,7 +50,14 @@
 			text-decoration: none;
 			cursor: pointer;
 		}
-	</style>	
+	</style>
+	
+	<script type="text/javascript">
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+
 </head>
 <body>
 
@@ -114,7 +121,11 @@
 			{% else %}
 				<h2> Inconclusive Diagnosis </h2>
 			{% endif %}				
+			<br><br>
+			<button class="btn btn-primary" id="back" onclick="goBack()">Edit Findings</button>
 		</div>	
+		
+		
 	</div>
 
 	<!-- Modal to display diagnosis -->
