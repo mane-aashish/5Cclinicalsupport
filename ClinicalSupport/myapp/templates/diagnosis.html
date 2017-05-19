@@ -1,0 +1,105 @@
+<html>
+<head>
+	<title> Test </title>
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- jQuery for JavaScript components -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<style type="text/css">
+		/* The Modal (background) */
+		.modal {
+			display: none; /* Hidden by default */
+			position: fixed; /* Stay in place */
+			z-index: 1; /* Sit on top */
+			padding-top: 100px; /* Location of the box */
+			left: 0;
+			top: 0;
+			width: 100%; /* Full width */
+			height: 100%; /* Full height */
+			overflow: auto; /* Enable scroll if needed */
+			background-color: rgb(0,0,0); /* Fallback color */
+			background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		}
+
+		/* Modal Content */
+		.modal-content {
+			background-color: #fefefe;
+			margin: auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+		}
+
+		/* The Close Button */
+		.close {
+			color: #aaaaaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
+
+		.close:hover,
+		.close:focus {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+		}
+	</style>	
+</head>
+<body>
+
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">5C Network</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+<!-- 	      <li class="active"><a href="#">Home</a></li>
+	      <li><a href="#">Page 1</a></li>
+	      <li><a href="#">Page 2</a></li>
+	      <li><a href="#">Page 3</a></li> -->
+	    </ul>
+	  </div>
+	</nav>
+	
+	<div class = "row" name = "possibleDiagnosis">
+			
+		<div class = "col-xs-6"  style="margin-left:50px;">
+	
+			{% if possibleDiagnosis  %}
+		
+				<h4> Possible Diagnosis </h4> <br>
+
+					{% for item in  possibleDiagnosis %}
+			
+						<p> Disease = {{item.disease}} <br>
+						Symptoms = {{item.symptoms}} <br><br>
+						</p>
+
+						{% endfor %}
+			
+			{% else %}			
+				<h2> Incolclusive diagnosis </h2>
+		
+
+			{% endif %}
+
+			</div>
+		</div>
+
+	<!-- Modal to display diagnosis -->
+	<div id="modal" class="modal">
+		<div class = "modal-content">
+		<span class="close">&times;</span>
+		<p id = "modal-paragraph"></p>
+		</div>	
+	</div>
+
+	</body>
+	</html>
