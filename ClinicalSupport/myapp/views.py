@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.template import Context
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
+from django.db.models import Q
 import string
 
 
@@ -63,8 +64,27 @@ def storeClinicInfo(request, rid):
 		hiv = request.POST.get('hiv', 'N')
 		uniqueID = request.session['uid']
 
-		userProfile = clinicUserProfile.objects.create(uid=uniqueID, smokingHistory=smokingHistory, allergies=allergies, cough=cough, fever=fever, hemoptysis=hemoptysis, breathlessness=breathlessness, skinrash=skinrash, tb=tb, cvd=cvd, sinusitis=sinusitis, asthma=asthma, dm=dm, hiv=hiv)
-		userProfile.save()
+		patientProfilePresent = clinicUserProfile.objects.filter(Q(uid=uniqueID))
+		if patientProfilePresent:
+			patientProfile = clinicUserProfile.objects.get(uid=uniqueID) 
+			patientProfile.uid = uniqueID
+			patientProfile.smokingHistory = smokingHistory
+			patientProfile.allergies = allergies
+			patientProfile.cough = cough
+			patientProfile.fever = fever
+			patientProfile.hemoptysis = hemoptysis
+			patientProfile.breathlessness = breathlessness
+			patientProfile.skinrash = skinrash
+			patientProfile.tb = tb
+			patientProfile.cvd = cvd
+			patientProfile.sinusitis = sinusitis
+			patientProfile.asthma = asthma
+			patientProfile.dm = dm
+			patientProfile.hiv = hiv
+			patientProfile.save()
+		else:
+			userProfile = clinicUserProfile.objects.create(uid=uniqueID, smokingHistory=smokingHistory, allergies=allergies, cough=cough, fever=fever, hemoptysis=hemoptysis, breathlessness=breathlessness, skinrash=skinrash, tb=tb, cvd=cvd, sinusitis=sinusitis, asthma=asthma, dm=dm, hiv=hiv)
+			userProfile.save()
 
 		response = render(request, "thanks.html")
 		return response
@@ -147,9 +167,6 @@ def viewChestClinicInfo(request, rid):
 			symptomList.append(str(heart))
 		uniqueID = request.session['radio-uid']
 
-		print "Symptom list = "
-		print symptomList
-
 		""" Computing list of possible diagnosis """
 
 		# Populating list of diagnosis
@@ -163,19 +180,12 @@ def viewChestClinicInfo(request, rid):
 		tempList = set(diagnosisList)
 		diagnosisList = list(tempList)
 
-		print "Diagnosis List = "
-		print diagnosisList
-
 		# Populating result dict
 		resultDict = []
 		for i in diagnosisList:
 			for key in diseaseDict:
 				if i == key:
-					#resultDict.update({str(key): str(diseaseDict[key])})
 					resultDict.append({str("disease"):str(key), str("symptoms"): str(diseaseDict[key])}) 
-
-		print "Result dict"
-		print resultDict
 
 		#userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidation, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
 		#userProfile.save()

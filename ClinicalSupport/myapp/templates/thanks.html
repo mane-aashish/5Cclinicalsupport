@@ -51,6 +51,14 @@
 			cursor: pointer;
 		}
 	</style>	
+
+	<script type="text/javascript">
+		function goBack() {
+			window.history.back();
+		}
+
+	</script>
+
 </head>
 <body>
 
@@ -73,6 +81,8 @@
 		<div class = "col-xs-4" style="margin-left:20px;">
 			
 			<h1> Response has been recorded </h1>
+
+			<button class="btn btn-primary" id="back" onclick = "goBack()">Edit Response</button>
 
 		</div>
 
