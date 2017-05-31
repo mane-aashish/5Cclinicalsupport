@@ -74,6 +74,8 @@
 			
 			<h2> Patient Symptoms </h2>
 
+			{% if patientDetails  %}
+
 			<table class = "table">
 				<tbody>
 					<tr>
@@ -132,6 +134,10 @@
 				</tbody>	
 			</table>
 
+			{% else %}
+			Clinical observations not collected
+			{% endif %}
+
 		</div>
 
 		<div id="radioData" class="col-xs-5">
@@ -179,7 +185,7 @@
 			</select><br><br>
 
 			<label for="nodules">Nodules</label>
-			<select class="form-control" id="consolidation" name = "consolidation">
+			<select class="form-control" id="nodules" name = "nodules">
 				<option value="NULL">NIL</option>
 				<option value="Nodules-Unilateral">Unilateral</option>
 				<option value="Nodules-Bilateral">Bilateral</option>

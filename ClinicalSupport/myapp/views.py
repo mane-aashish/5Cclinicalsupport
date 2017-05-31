@@ -19,7 +19,7 @@ from models import *
 diseaseDict = {
 	"UIP": "Honeycombing; Fibrosis-Basal",
 	"NSIP": "Septal Thickening-Irregular; Fibrosis-Mixed; Ground Glass",
-	"Hypersensitivity Pneumonitis": "Allergy; Nodules-Illdefined",
+	"Hypersensitivity Pneumonitis": "Allergies; Nodules-Illdefined",
 	"Rb -ILD": "Smoking; Nodules-Illdefined",
 	"DIP": "Smoking; Ground Glass",
 	"Pulmonary Edema": "Ground Glass; Septal Thickening-Smooth; Perihilar; Fibrosis-Basal; Heart-Large",
@@ -92,13 +92,26 @@ def storeClinicInfo(request, rid):
 def viewChestClinicInfo(request, rid):
 	
 	if request.method == 'GET':
-		request.session['radio-uid'] = str(rid)
-		patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])	
-		patientDetails = {'smokingHistory': patientProfile.smokingHistory, 'allergies': patientProfile.allergies, 'cough': patientProfile.cough, 'fever': patientProfile.fever, 'hemoptysis':patientProfile.hemoptysis, 'breathlessness':patientProfile.breathlessness, 'skinrash':patientProfile.skinrash, 'tb':patientProfile.tb, 'cvd':patientProfile.cvd, 'sinusitis':patientProfile.sinusitis, 'asthma':patientProfile.asthma, 'dm':patientProfile.dm, 'hiv':patientProfile.hiv}
-		return render(request, 'radio-chest.html',{'patientDetails': patientDetails})
+		patientProfilePresent = clinicUserProfile.objects.filter(Q(uid=str(rid)))
+		if patientProfilePresent:
+			request.session['radio-uid'] = str(rid)
+			patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])	
+			patientDetails = {'smokingHistory': patientProfile.smokingHistory, 'allergies': patientProfile.allergies, 'cough': patientProfile.cough, 'fever': patientProfile.fever, 'hemoptysis':patientProfile.hemoptysis, 'breathlessness':patientProfile.breathlessness, 'skinrash':patientProfile.skinrash, 'tb':patientProfile.tb, 'cvd':patientProfile.cvd, 'sinusitis':patientProfile.sinusitis, 'asthma':patientProfile.asthma, 'dm':patientProfile.dm, 'hiv':patientProfile.hiv}
+			return render(request, 'radio-chest.html',{'patientDetails': patientDetails})
+		else:
+			return render(request, 'radio-chest.html')
 
 	if request.method == 'POST':
 		symptomList = []
+
+		# Clinical observations
+		patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])
+		if patientProfile.smokingHistory == 'Y':
+			symptomList.append(str("Smoking"))
+		if patientProfile.smokingHistory != "NIL":
+			symptomList.append(str("Allergies"))
+
+		# Radiologist findings
 		honeycombing = request.POST.get('honeycombing', 'N')
 		if honeycombing != 'N':
 			symptomList.append(str("Honeycombing"))
@@ -166,6 +179,8 @@ def viewChestClinicInfo(request, rid):
 		if heart != "NULL":
 			symptomList.append(str(heart))
 		uniqueID = request.session['radio-uid']
+
+		print symptomList
 
 		""" Computing list of possible diagnosis """
 
