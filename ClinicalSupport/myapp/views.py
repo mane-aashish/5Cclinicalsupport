@@ -190,7 +190,13 @@ def viewChestClinicInfo(request, rid):
 		#userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidation, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
 		#userProfile.save()
 
-		response = render(request, "diagnosis.html", {'possibleDiagnosis': resultDict})
+		# Creating dict for selected items
+		selectedDict = []
+		for i in symptomList:
+			selectedDict.append({str("selectedItem"): str(i)})
+
+
+		response = render(request, "diagnosis.html", {'possibleDiagnosis': resultDict, 'selectedSymptom': selectedDict})
 		return response
 
 

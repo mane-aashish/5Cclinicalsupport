@@ -75,6 +75,18 @@
 	  </div>
 	</nav>
 	
+	<div class = "row" style="margin-left:50px">
+
+		<h4> Selected Symptoms: </h4> 
+		{% if selectedSymptom  %}
+			{% for item in selectedSymptom %}
+				<button type = "button" class = "btn btn-primary" disabled style="margin-top:10px;"> {{item.selectedItem}} </button>
+			{% endfor %}
+		{% endif %}
+		<br><br>
+
+	</div>	
+
 	<div class = "row" name = "possibleDiagnosis">
 			
 <!-- 		<div class = "col-xs-6"  style="margin-left:50px;">
@@ -100,13 +112,14 @@
 			</div> -->
 
 		<div class = "col-xs-6"  style="margin-left:50px;">
+			
 			{% if possibleDiagnosis  %}
 				<h4> Possible Diagnosis </h4>
 				<table class = "table">
 					<thead>
 						<tr>
 							<th> Disease </th>
-							<th> Symptoms </th>
+							<th> Associated Symptoms </th>
 						</tr>
 					</thead>
 					<tbody>
