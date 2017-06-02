@@ -113,8 +113,37 @@
 
 		<div class = "col-xs-6"  style="margin-left:50px;">
 			
-			{% if possibleDiagnosis  %}
+		<!-- Possible Diagnosis -->
+		{% if exactDiagnosis  %}
 				<h4> Possible Diagnosis </h4>
+				<table class = "table">
+					<thead>
+						<tr>
+							<th> Disease </th>
+							<th> Associated Symptoms </th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for item in  exactDiagnosis %}
+							<tr>
+								<td> {{item.disease}} </td>
+								<td> {{item.symptoms}} </td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% else %}
+				<h2> Inconclusive Diagnosis </h2>
+			{% endif %}				
+			<br><br>	
+
+			
+
+
+		<!-- Differential Diagnosis -->
+
+			{% if possibleDiagnosis  %}
+				<h4> Differential Diagnosis </h4>
 				<table class = "table">
 					<thead>
 						<tr>

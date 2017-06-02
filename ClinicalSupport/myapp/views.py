@@ -15,13 +15,16 @@ import string
 from models import *
 
 
-# Creating the observation - disease dictionary mapping
+""" Creating the observation - disease dictionary mapping
+
+	Entries should be in the form Disease: Symptoms """
+
 diseaseDict = {
 	"UIP": "Honeycombing; Fibrosis-Basal",
 	"NSIP": "Septal Thickening-Irregular; Fibrosis-Mixed; Ground Glass",
 	"Hypersensitivity Pneumonitis": "Allergies; Nodules-Illdefined",
 	"Rb -ILD": "Smoking; Nodules-Illdefined",
-	"DIP": "Smoking; Ground Glass",
+	"DIP": "Smoking; Ground Glass-Diffuse",
 	"Pulmonary Edema": "Ground Glass; Septal Thickening-Smooth; Perihilar; Fibrosis-Basal; Heart-Large",
 	"COP": "Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular; Reverse Halo",
 	"Eosinophilic Pneumonia": "Eosinophilia; Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular",
@@ -40,7 +43,8 @@ diseaseDict = {
 # Create your views here.
 
 
-# This view is used to capture the UID and store the clinicInfo 
+# This view is used to capture the UID and store the clinic observations
+
 def storeClinicInfo(request, rid):
 
 	if request.method == 'GET':
@@ -104,12 +108,12 @@ def viewChestClinicInfo(request, rid):
 	if request.method == 'POST':
 		symptomList = []
 
-		# Clinical observations
+		#  Retrieving clinical observations
 		patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])
 		if patientProfile.smokingHistory == 'Y':
 			symptomList.append(str("Smoking"))
-		if patientProfile.smokingHistory != "NIL":
-			symptomList.append(str("Allergies"))
+		#if patientProfile.smokingHistory != "NIL":
+			#symptomList.append(str("Allergies"))
 
 		# Radiologist findings
 		honeycombing = request.POST.get('honeycombing', 'N')
@@ -180,9 +184,21 @@ def viewChestClinicInfo(request, rid):
 			symptomList.append(str(heart))
 		uniqueID = request.session['radio-uid']
 
-		print symptomList
-
 		""" Computing list of possible diagnosis """
+
+		
+		# Finding exact match for entered symptoms
+		tempDict = diseaseDict.copy()
+		for i in symptomList:
+			for key in tempDict.keys():
+				if i not in tempDict[key]:
+					del tempDict[key]
+
+		# Populating dictionary to display exact diagnosis on the template
+		exactDiagnosis = []
+		for key in tempDict:
+			exactDiagnosis.append({str("disease"):str(key), str("symptoms"): str(diseaseDict[key])})
+		
 
 		# Populating list of diagnosis
 		diagnosisList = []
@@ -200,8 +216,15 @@ def viewChestClinicInfo(request, rid):
 		for i in diagnosisList:
 			for key in diseaseDict:
 				if i == key:
-					resultDict.append({str("disease"):str(key), str("symptoms"): str(diseaseDict[key])}) 
+					resultDict.append({str("disease"):str(key), str("symptoms"): str(diseaseDict[key])})
 
+		# Removing matches between resultDict and exactDiagnosis
+		for i in exactDiagnosis:
+			if i in resultDict:
+				resultDict.remove(i)
+
+
+		# Uncomment the bottom two lines to store radiologist findings in the DB
 		#userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidation, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
 		#userProfile.save()
 
@@ -211,7 +234,8 @@ def viewChestClinicInfo(request, rid):
 			selectedDict.append({str("selectedItem"): str(i)})
 
 
-		response = render(request, "diagnosis.html", {'possibleDiagnosis': resultDict, 'selectedSymptom': selectedDict})
+		response = render(request, "diagnosis.html", {'possibleDiagnosis': resultDict, 'selectedSymptom': selectedDict, 'exactDiagnosis': exactDiagnosis})
+		#response = render(request, "diagnosis.html", {'possibleDiagnosis': resultDict, 'selectedSymptom': selectedDict})
 		return response
 
 
