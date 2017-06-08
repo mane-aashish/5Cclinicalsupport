@@ -26,23 +26,26 @@ diseaseDict = {
 	"Rb -ILD": "Smoking; Nodules-Centrilobular; Tree in Bud Lesion",
 	"DIP": "Smoking; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy",
 	"Pulmonary Edema": "Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy; Septal Thickening-Smooth; Heart-Large",
-	"COP": "Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular",
+	"COP": "Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular; Reverse Halo",
 	"Eosinophilic Pneumonia": "Eosinophilia; Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular",
 	"Invasive Aspergillosis": "Halo Sign",
 	"Opportunistic Infections": "Reverse Halo",
 	"Old TB": "Fibrosis-Apical; Lymph Nodes-Calcifications",
-	"TB": "Cavity-Smooth; Tree in Bud Lesion; Consolidation; Lymph Nodes; Pleural Effusion",
+	"TB": "Cavity-Smooth; Tree in Bud Lesion; Consolidation; Pleural Effusion; Lymph Nodes-Unilateral; Lymph Nodes-Bilateral; Lymph Nodes-Hilar; Lymph Nodes-Calcifications",
 	"Sarcoidosis": "Lymph Nodes-Calcifications; Lymph Nodes-Hilar; Nodules-Peribronchovascular; Nodules-Fissural",
 	"Lymphangitis Carcinomatosa": "Septal Thickening-Irregular; Septal Thickening-Nodular; Septal Thickening-Unilateral",
 	"PCP/CMV pneumonia": "Ground Glass-Diffuse; HIV/Immunocompromised",
 	"Military TB": "Nodules-Random; Nodules-Bilateral",
-	"ARDS": "Consolidation-Bilaterla; Consolidation-Acute; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy",
+	"ARDS": "Consolidation-Bilateral; Consolidation-Acute; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy",
 	"Lymphoid Interstitial Pneumonia": "HIV/Immunocompromised; Cysts-Thin Wall",
 	"Langerhans Cell Histiocytosis": "Smoking; Cysts-Thick Wall; Cysts-Irregular",
 	"Chronic Hypersensitivity": "Fibrosis-Mid",
 	"Constrictive Bronchiolitis/ Chronic Pulmonary Thromboembolism": "Mosaic Attenuation",
 	"Hypersensitivity Pneumonitis": "Mosaic Attenuation; Allergies",
-	"Lipoid Pneumonia": "Consolidation; Fat"
+	"Lipoid Pneumonia": "Consolidation; Fat",
+	"Silicosis": "Mining/Tunnel Work; Nodules-Bilateral; Lymph Nodes-Calcifications",
+	"Combined Pulmonary Fibrosis and Emphysema": "Emphysema; Septal Thickening-Irregular",
+	"Alveolar proteinosis/ARDS/AIP; COP/PCP,Hemorrhage/BAC": "Septal Thickening-Irregular; Crazy Paving"
 
 
 }
@@ -131,6 +134,8 @@ def viewChestClinicInfo(request, rid):
 			symptomList.append(str("HIV/Immunocompromised"))
 		if patientProfile.eosinophilia == 'Y':
 			symptomList.append(str("Eosinophilia"))
+		if patientProfile.mining == 'Y':
+			symptomList.append(str("Mining/Tunnel Work"))
 
 		# Radiologist findings
 		honeycombing = request.POST.get('honeycombing', 'N')
