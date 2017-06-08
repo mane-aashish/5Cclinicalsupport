@@ -65,6 +65,8 @@ def storeClinicInfo(request, rid):
 
 	
 	if request.method == 'POST':
+		sex = request.POST.get('sex', "MALE")
+		age = request.POST.get('age', "25")
 		smokingHistory = request.POST.get('smoking', 'N')
 		allergies = request.POST.get('allergies', "NIL")
 		cough = request.POST.get('cough', 'N')
@@ -86,6 +88,8 @@ def storeClinicInfo(request, rid):
 		if patientProfilePresent:
 			patientProfile = clinicUserProfile.objects.get(uid=uniqueID) 
 			patientProfile.uid = uniqueID
+			patientProfile.sex = sex
+			patientProfile.age = age
 			patientProfile.smokingHistory = smokingHistory
 			patientProfile.allergies = allergies
 			patientProfile.cough = cough
@@ -103,7 +107,7 @@ def storeClinicInfo(request, rid):
 			patientProfile.mining = mining
 			patientProfile.save()
 		else:
-			userProfile = clinicUserProfile.objects.create(uid=uniqueID, smokingHistory=smokingHistory, allergies=allergies, cough=cough, fever=fever, hemoptysis=hemoptysis, breathlessness=breathlessness, skinrash=skinrash, tb=tb, cvd=cvd, sinusitis=sinusitis, asthma=asthma, dm=dm, hiv=hiv, mining=mining, eosinophilia=eosinophilia)
+			userProfile = clinicUserProfile.objects.create(uid=uniqueID, sex=sex, age=age, smokingHistory=smokingHistory, allergies=allergies, cough=cough, fever=fever, hemoptysis=hemoptysis, breathlessness=breathlessness, skinrash=skinrash, tb=tb, cvd=cvd, sinusitis=sinusitis, asthma=asthma, dm=dm, hiv=hiv, mining=mining, eosinophilia=eosinophilia)
 			userProfile.save()
 
 		response = render(request, "thanks.html")
@@ -116,7 +120,7 @@ def viewChestClinicInfo(request, rid):
 		if patientProfilePresent:
 			request.session['radio-uid'] = str(rid)
 			patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])	
-			patientDetails = {'smokingHistory': patientProfile.smokingHistory, 'allergies': patientProfile.allergies, 'cough': patientProfile.cough, 'fever': patientProfile.fever, 'hemoptysis':patientProfile.hemoptysis, 'breathlessness':patientProfile.breathlessness, 'skinrash':patientProfile.skinrash, 'tb':patientProfile.tb, 'cvd':patientProfile.cvd, 'sinusitis':patientProfile.sinusitis, 'asthma':patientProfile.asthma, 'dm':patientProfile.dm, 'hiv':patientProfile.hiv, 'mining':patientProfile.mining, 'eosinophilia':patientProfile.eosinophilia}
+			patientDetails = {'sex': patientProfile.sex, 'age' : patientProfile.age , 'smokingHistory': patientProfile.smokingHistory, 'allergies': patientProfile.allergies, 'cough': patientProfile.cough, 'fever': patientProfile.fever, 'hemoptysis':patientProfile.hemoptysis, 'breathlessness':patientProfile.breathlessness, 'skinrash':patientProfile.skinrash, 'tb':patientProfile.tb, 'cvd':patientProfile.cvd, 'sinusitis':patientProfile.sinusitis, 'asthma':patientProfile.asthma, 'dm':patientProfile.dm, 'hiv':patientProfile.hiv, 'mining':patientProfile.mining, 'eosinophilia':patientProfile.eosinophilia}
 			return render(request, 'radio-chest.html',{'patientDetails': patientDetails})
 		else:
 			return render(request, 'radio-chest.html')
@@ -254,6 +258,10 @@ def viewChestClinicInfo(request, rid):
 		selectedDict = []
 		for i in symptomList:
 			selectedDict.append({str("selectedItem"): str(i)})
+
+		# Special case for LAM
+		if str("Cysts-Thin Wall") in symptomList and patientProfile.sex == "FEMALE" and int(patientProfile.age) < 40:
+			exactDiagnosis.append({str("disease"):str("LAM"), str("symptoms"): str("Cysts-Thin Wall; Premenopausal Female")}) 
 
 
 		response = render(request, "diagnosis.html", {'possibleDiagnosis': resultDict, 'selectedSymptom': selectedDict, 'exactDiagnosis': exactDiagnosis})

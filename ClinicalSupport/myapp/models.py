@@ -6,6 +6,8 @@ from django.db import models
 # Create your models here.
 class clinicUserProfile(models.Model):
 	uid = models.CharField(max_length = 50, primary_key=True)
+	sex = models.CharField(max_length = 10, default="MALE")
+	age = models.CharField(max_length = 3, default="25")
 	smokingHistory = models.CharField(max_length = 1, default="N")
 	allergies = models.CharField(max_length = 50, blank=True, default="NIL")
 	cough = models.CharField(max_length = 1, default="N")
