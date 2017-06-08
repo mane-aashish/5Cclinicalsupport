@@ -127,8 +127,16 @@
 						<td> {{patientDetails.dm}} </td>
 					</tr>
 					<tr>
+						<td> Eosinophilia: </td>
+						<td> {{patientDetails.eosinophilia}} </td>
+					</tr>
+					<tr>
 						<td> HIV: </td>
 						<td> {{patientDetails.hiv}} </td>
+					</tr>
+					<tr>
+						<td> Mining/Tunnel Work: </td>
+						<td> {{patientDetails.mining}} </td>
 					</tr>
 
 				</tbody>	
@@ -172,6 +180,7 @@
 				<option value="Consolidation-Subpleural">Subpleural</option>
 				<option value="Consolidation-Peribronchovascualar">Peribronchovascualar</option>
 				<option value="Consolidation-Peripheral">Peripheral</option>
+				<option value="Consolidation-Acute">Acute</option>
 				<option value="Consolidation-Persistent">Persistent</option>
 			</select><br><br>
 
@@ -182,6 +191,7 @@
 				<option value="Fibrosis-Mid">Mid</option>
 				<option value="Fibrosis-Basal">Basal</option>
 				<option value="Fibrosis-Mixed">Mixed</option>
+				<option value="Fibrosis-Subpleural">Subpleural</option>
 			</select><br><br>
 
 			<label for="nodules">Nodules</label>
@@ -194,6 +204,8 @@
 				<option value="Nodules-Random">Random</option>
 				<option value="Nodules-Peribronchovascular">Peribronchovascular</option>
 				<option value="Nodules-Perilymphatic">Perilymphatic</option>
+				<option value="Nodules-Centrilobular">Centrilobular</option>
+				<option value="Nodules-Fissural">Fissural</option>
 			</select><br><br>
 
 
@@ -219,15 +231,15 @@
 			<label for="cavity">Cavity</label>
 			<select class="form-control" id="cavity" name = "cavity">
 				<option value="NULL">NIL</option>
-				<option value="Cavity-Smooth">Smooth</option>
-				<option value="Cavity-Nodular">Nodular</option>
+				<option value="Cavity-Smooth">Smooth Wall</option>
+				<option value="Cavity-Nodular">Nodular Wall</option>
 			</select><br><br>	
 
 			<label for="cysts">Cysts</label>
 			<select class="form-control" id="cysts" name = "cysts">
 				<option value="NULL">NIL</option>
-				<option value="Cysts-Unilateral/Bilateral">Unilateral/Bilateral</option>
-				<option value="Cysts-Wall">Wall</option>
+				<option value="Cysts-Thin Wall">Thin Wall</option>
+				<option value="Cysts-Thick Wall">Thick Wall</option>
 				<option value="Cysts-No Wall">No Wall</option>
 				<option value="Cysts-Irregular">Irregular</option>
 			</select><br><br>
@@ -240,6 +252,7 @@
 				<option value="NULL">NIL</option>
 				<option value="Lymph Nodes-Unilateral">Unilateral</option>
 				<option value="Lymph Nodes-Bilateral">Bilateral</option>
+				<option value="Lymph Nodes-Hilar">Hilar</option>
 				<option value="Lymph Nodes-Calcifications">Calcifications</option>
 			</select><br><br>
 

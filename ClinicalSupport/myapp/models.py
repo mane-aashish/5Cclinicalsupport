@@ -7,7 +7,7 @@ from django.db import models
 class clinicUserProfile(models.Model):
 	uid = models.CharField(max_length = 50, primary_key=True)
 	smokingHistory = models.CharField(max_length = 1, default="N")
-	allergies = models.CharField(max_length = 50, blank=True)
+	allergies = models.CharField(max_length = 50, blank=True, default="NIL")
 	cough = models.CharField(max_length = 1, default="N")
 	fever = models.CharField(max_length = 1, default="N")
 	hemoptysis = models.CharField(max_length = 1, default="N")
@@ -18,7 +18,9 @@ class clinicUserProfile(models.Model):
 	sinusitis = models.CharField(max_length = 1, default="N")
 	asthma = models.CharField(max_length = 1, default="N")
 	dm = models.CharField(max_length = 1, default="N")
+	eosinophilia = models.CharField(max_length = 1, default="N")
 	hiv = models.CharField(max_length = 1, default="N")
+	mining = models.CharField(max_length = 1, default="N")
 
 	def __unicode__(self):
 		return self.uid

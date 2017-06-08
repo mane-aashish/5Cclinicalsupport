@@ -20,22 +20,31 @@ from models import *
 	Entries should be in the form Disease: Symptoms """
 
 diseaseDict = {
-	"UIP": "Honeycombing; Fibrosis-Basal",
-	"NSIP": "Septal Thickening-Irregular; Fibrosis-Mixed; Ground Glass",
-	"Hypersensitivity Pneumonitis": "Allergies; Nodules-Illdefined",
-	"Rb -ILD": "Smoking; Nodules-Illdefined",
-	"DIP": "Smoking; Ground Glass-Diffuse",
-	"Pulmonary Edema": "Ground Glass; Septal Thickening-Smooth; Perihilar; Fibrosis-Basal; Heart-Large",
-	"COP": "Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular; Reverse Halo",
+	"UIP": "Honeycombing; Fibrosis-Basal; Fibrosis-Subpleural",
+	"NSIP": "Septal Thickening-Irregular; Fibrosis-Mixed; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy",
+	"Hypersensitivity Pneumonitis": "Allergies; Nodules-Centrilobular; Air Trapping",
+	"Rb -ILD": "Smoking; Nodules-Centrilobular; Tree in Bud Lesion",
+	"DIP": "Smoking; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy",
+	"Pulmonary Edema": "Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy; Septal Thickening-Smooth; Heart-Large",
+	"COP": "Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular",
 	"Eosinophilic Pneumonia": "Eosinophilia; Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular",
-	"ABPA": "Halo Sign",
+	"Invasive Aspergillosis": "Halo Sign",
 	"Opportunistic Infections": "Reverse Halo",
 	"Old TB": "Fibrosis-Apical; Lymph Nodes-Calcifications",
 	"TB": "Cavity-Smooth; Tree in Bud Lesion; Consolidation; Lymph Nodes; Pleural Effusion",
-	"Sarcoidosis": "Lymph Nodes; Nodules-Peribronchovascular;",
+	"Sarcoidosis": "Lymph Nodes-Calcifications; Lymph Nodes-Hilar; Nodules-Peribronchovascular; Nodules-Fissural",
 	"Lymphangitis Carcinomatosa": "Septal Thickening-Irregular; Septal Thickening-Nodular; Septal Thickening-Unilateral",
-	"PCP/CMV pneumonia": "Ground Glass-Diffuse; Immunocompromised",
-	"Military TB": "Nodules-Random; Nodules-Bilateral"
+	"PCP/CMV pneumonia": "Ground Glass-Diffuse; HIV/Immunocompromised",
+	"Military TB": "Nodules-Random; Nodules-Bilateral",
+	"ARDS": "Consolidation-Bilaterla; Consolidation-Acute; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy",
+	"Lymphoid Interstitial Pneumonia": "HIV/Immunocompromised; Cysts-Thin Wall",
+	"Langerhans Cell Histiocytosis": "Smoking; Cysts-Thick Wall; Cysts-Irregular",
+	"Chronic Hypersensitivity": "Fibrosis-Mid",
+	"Constrictive Bronchiolitis/ Chronic Pulmonary Thromboembolism": "Mosaic Attenuation",
+	"Hypersensitivity Pneumonitis": "Mosaic Attenuation; Allergies",
+	"Lipoid Pneumonia": "Consolidation; Fat"
+
+
 }
 
 
@@ -54,7 +63,7 @@ def storeClinicInfo(request, rid):
 	
 	if request.method == 'POST':
 		smokingHistory = request.POST.get('smoking', 'N')
-		allergies = request.POST['allergies']
+		allergies = request.POST.get('allergies', "NIL")
 		cough = request.POST.get('cough', 'N')
 		fever = request.POST.get('fever', 'N')
 		hemoptysis = request.POST.get('hemoptysis','N')
@@ -65,7 +74,9 @@ def storeClinicInfo(request, rid):
 		sinusitis = request.POST.get('sinusitis', 'N')
 		asthma = request.POST.get('asthma', 'N')
 		dm = request.POST.get('dm', 'N')
+		eosinophilia = request.POST.get('eosinophilia', 'N')
 		hiv = request.POST.get('hiv', 'N')
+		mining = request.POST.get('mining', 'N')
 		uniqueID = request.session['uid']
 
 		patientProfilePresent = clinicUserProfile.objects.filter(Q(uid=uniqueID))
@@ -84,10 +95,12 @@ def storeClinicInfo(request, rid):
 			patientProfile.sinusitis = sinusitis
 			patientProfile.asthma = asthma
 			patientProfile.dm = dm
+			patientProfile.eosinophilia = eosinophilia
 			patientProfile.hiv = hiv
+			patientProfile.mining = mining
 			patientProfile.save()
 		else:
-			userProfile = clinicUserProfile.objects.create(uid=uniqueID, smokingHistory=smokingHistory, allergies=allergies, cough=cough, fever=fever, hemoptysis=hemoptysis, breathlessness=breathlessness, skinrash=skinrash, tb=tb, cvd=cvd, sinusitis=sinusitis, asthma=asthma, dm=dm, hiv=hiv)
+			userProfile = clinicUserProfile.objects.create(uid=uniqueID, smokingHistory=smokingHistory, allergies=allergies, cough=cough, fever=fever, hemoptysis=hemoptysis, breathlessness=breathlessness, skinrash=skinrash, tb=tb, cvd=cvd, sinusitis=sinusitis, asthma=asthma, dm=dm, hiv=hiv, mining=mining, eosinophilia=eosinophilia)
 			userProfile.save()
 
 		response = render(request, "thanks.html")
@@ -100,7 +113,7 @@ def viewChestClinicInfo(request, rid):
 		if patientProfilePresent:
 			request.session['radio-uid'] = str(rid)
 			patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])	
-			patientDetails = {'smokingHistory': patientProfile.smokingHistory, 'allergies': patientProfile.allergies, 'cough': patientProfile.cough, 'fever': patientProfile.fever, 'hemoptysis':patientProfile.hemoptysis, 'breathlessness':patientProfile.breathlessness, 'skinrash':patientProfile.skinrash, 'tb':patientProfile.tb, 'cvd':patientProfile.cvd, 'sinusitis':patientProfile.sinusitis, 'asthma':patientProfile.asthma, 'dm':patientProfile.dm, 'hiv':patientProfile.hiv}
+			patientDetails = {'smokingHistory': patientProfile.smokingHistory, 'allergies': patientProfile.allergies, 'cough': patientProfile.cough, 'fever': patientProfile.fever, 'hemoptysis':patientProfile.hemoptysis, 'breathlessness':patientProfile.breathlessness, 'skinrash':patientProfile.skinrash, 'tb':patientProfile.tb, 'cvd':patientProfile.cvd, 'sinusitis':patientProfile.sinusitis, 'asthma':patientProfile.asthma, 'dm':patientProfile.dm, 'hiv':patientProfile.hiv, 'mining':patientProfile.mining, 'eosinophilia':patientProfile.eosinophilia}
 			return render(request, 'radio-chest.html',{'patientDetails': patientDetails})
 		else:
 			return render(request, 'radio-chest.html')
@@ -112,8 +125,12 @@ def viewChestClinicInfo(request, rid):
 		patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])
 		if patientProfile.smokingHistory == 'Y':
 			symptomList.append(str("Smoking"))
-		#if patientProfile.smokingHistory != "NIL":
-			#symptomList.append(str("Allergies"))
+		if patientProfile.allergies != "NIL":
+			symptomList.append(str("Allergies"))
+		if patientProfile.hiv == 'Y':
+			symptomList.append(str("HIV/Immunocompromised"))
+		if patientProfile.eosinophilia == 'Y':
+			symptomList.append(str("Eosinophilia"))
 
 		# Radiologist findings
 		honeycombing = request.POST.get('honeycombing', 'N')
