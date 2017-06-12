@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^chest/clinic/(?P<rid>\w+)', storeClinicInfo),
     url(r'^chest/radio/(?P<rid>\w+)', viewChestClinicInfo),
+    url(r'^chest/diagnosis/(?P<rid>\w+)', viewChestDiagnosis),
 
 ]
 

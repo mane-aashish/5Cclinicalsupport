@@ -46,8 +46,6 @@ diseaseDict = {
 	"Silicosis": "Mining/Tunnel Work; Nodules-Bilateral; Lymph Nodes-Calcifications",
 	"Combined Pulmonary Fibrosis and Emphysema": "Emphysema; Septal Thickening-Irregular",
 	"Alveolar proteinosis/ARDS/AIP; COP/PCP,Hemorrhage/BAC": "Septal Thickening-Irregular; Crazy Paving"
-
-
 }
 
 
@@ -112,6 +110,8 @@ def storeClinicInfo(request, rid):
 
 		response = render(request, "thanks.html")
 		return response
+
+
 
 def viewChestClinicInfo(request, rid):
 	
@@ -210,7 +210,7 @@ def viewChestClinicInfo(request, rid):
 			symptomList.append(str(heart))
 		uniqueID = request.session['radio-uid']
 
-		""" Computing list of possible diagnosis """
+		# Computing list of possible diagnosis
 
 		
 		# Finding exact match for entered symptoms
@@ -250,10 +250,6 @@ def viewChestClinicInfo(request, rid):
 				resultDict.remove(i)
 
 
-		# Uncomment the bottom two lines to store radiologist findings in the DB
-		#userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidation, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
-		#userProfile.save()
-
 		# Creating dict for selected items
 		selectedDict = []
 		for i in symptomList:
@@ -262,11 +258,170 @@ def viewChestClinicInfo(request, rid):
 		# Special case for LAM
 		if str("Cysts-Thin Wall") in symptomList and patientProfile.sex == "FEMALE" and int(patientProfile.age) < 40:
 			exactDiagnosis.append({str("disease"):str("LAM"), str("symptoms"): str("Cysts-Thin Wall; Premenopausal Female")}) 
+		
 
+		# Storing information in the DB
+		profilePresent = radioUserProfileChest.objects.filter(Q(uid=uniqueID))
+		if profilePresent:
+			profile = radioUserProfileChest.objects.get(uid=uniqueID)
+			profile.uid = uniqueID
+			profile.honeycombing=honeycombing
+			profile.septal=septal
+			profile.groundGlass=groundGlass
+			profile.consolidation=consolidation
+			profile.fibrosis=fibrosis
+			profile.nodules=nodules
+			profile.massLesion=massLesion
+			profile.treeInBudLesion=treeInBudLesion
+			profile.airTrapping=airTrapping
+			profile.mosaicAttenuation=mosaicAttenuation
+			profile.bronchiectasis=bronchiectasis
+			profile.cysts=cysts
+			profile.cavity=cavity
+			profile.emphysema=emphysema
+			profile.lymphNodes=lymphNodes
+			profile.pleuralEffusion=pleuralEffusion
+			profile.pleuralThickening = pleuralThickening
+			profile.crazyPaving=crazyPaving
+			profile.haloSign=haloSign
+			profile.reverseHalo=reverseHalo
+			profile.fat=fat
+			profile.heart=heart
+			profile.save()
+		else:
+			userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidation, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
+			userProfile.save()
+		
+		
 
 		response = render(request, "diagnosis.html", {'possibleDiagnosis': resultDict, 'selectedSymptom': selectedDict, 'exactDiagnosis': exactDiagnosis})
 		#response = render(request, "diagnosis.html", {'possibleDiagnosis': resultDict, 'selectedSymptom': selectedDict})
 		return response
+
+
+def viewChestDiagnosis(request, rid):
+	uniqueID = str(rid)
+	# Initializing symptom list
+	symptomList = []
+
+	# Checking if required information has been recorded
+	profileClinicPresent = radioUserProfileChest.objects.filter(Q(uid=uniqueID))
+	profileRadioPresent = radioUserProfileChest.objects.filter(Q(uid=uniqueID))
+
+	if profileClinicPresent and profileRadioPresent:
+		#  Retrieving clinical observations
+		patientClinicProfile = clinicUserProfile.objects.get(uid=uniqueID)
+		if patientClinicProfile.smokingHistory == 'Y':
+			symptomList.append(str("Smoking"))
+		if patientClinicProfile.allergies != "NIL":
+			symptomList.append(str("Allergies"))
+		if patientClinicProfile.hiv == 'Y':
+			symptomList.append(str("HIV/Immunocompromised"))
+		if patientClinicProfile.eosinophilia == 'Y':
+			symptomList.append(str("Eosinophilia"))
+		if patientClinicProfile.mining == 'Y':
+			symptomList.append(str("Mining/Tunnel Work"))
+
+		# Retrieving radiologist information
+		patientRadioProfile = radioUserProfileChest.objects.get(uid=uniqueID)
+		if patientRadioProfile.honeycombing != 'N':
+			symptomList.append(str("Honeycombing"))
+		if patientRadioProfile.septal != "NULL":
+			symptomList.append(str(patientRadioProfile.septal))
+		if patientRadioProfile.groundGlass != "NULL":
+			symptomList.append(str(patientRadioProfile.groundGlass))
+		if patientRadioProfile.consolidation != "NULL":
+			symptomList.append(str(patientRadioProfile.consolidation))
+		if patientRadioProfile.fibrosis != "NULL":
+			symptomList.append(str(patientRadioProfile.fibrosis))
+		if patientRadioProfile.nodules != "NULL":
+			symptomList.append(str(patientRadioProfile.nodules))
+		if patientRadioProfile.massLesion != "N":
+			symptomList.append(str("Mass Lesion"))
+		if patientRadioProfile.treeInBudLesion != "N":
+			symptomList.append(str("Tree in Bud Lesion"))
+		if patientRadioProfile.airTrapping != "N":
+			symptomList.append(str("Air Trapping"))
+		if patientRadioProfile.mosaicAttenuation != "N":
+			symptomList.append(str("Mosaic Attenuation"))
+		if patientRadioProfile.bronchiectasis != "NULL":
+			symptomList.append(str(patientRadioProfile.bronchiectasis))
+		if patientRadioProfile.cavity != "NULL":
+			symptomList.append(str(patientRadioProfile.cavity))
+		if patientRadioProfile.cysts != "NULL":
+			symptomList.append(str(patientRadioProfile.cysts))
+		if patientRadioProfile.emphysema != "N":
+			symptomList.append(str("Emphysema"))
+		if patientRadioProfile.lymphNodes != "NULL":
+			symptomList.append(str(patientRadioProfile.lymphNodes))
+		if patientRadioProfile.pleuralEffusion != "N":
+			symptomList.append(str("Pleural Effusion"))
+		if patientRadioProfile.pleuralThickening != "NULL":
+			symptomList.append(str(patientRadioProfile.pleuralThickening))
+		if patientRadioProfile.crazyPaving != "N":
+			symptomList.append(str("Crazy Paving"))
+		if patientRadioProfile.haloSign != "N":
+			symptomList.append(str("Halo Sign"))
+		if patientRadioProfile.reverseHalo != "N":
+			symptomList.append(str("Reverse Halo"))
+		if patientRadioProfile.fat != "N":
+			symptomList.append(str("Fat"))
+		if patientRadioProfile.heart != "NULL":
+			symptomList.append(str(patientRadioProfile.heart))
+
+		# Finding exact match for entered symptoms
+		tempDict = diseaseDict.copy()
+		for i in symptomList:
+			for key in tempDict.keys():
+				if i not in tempDict[key]:
+					del tempDict[key]
+
+		# Populating dictionary to display exact diagnosis on the template
+		exactDiagnosis = []
+		for key in tempDict:
+			exactDiagnosis.append({str("disease"):str(key), str("symptoms"): str(diseaseDict[key])})
+		
+
+		# Populating list of diagnosis
+		diagnosisList = []
+		for i in symptomList:
+			for key in diseaseDict:
+				if i in diseaseDict[key]:
+					diagnosisList.append(str(key))
+
+		# Removing duplicates from the list
+		tempList = set(diagnosisList)
+		diagnosisList = list(tempList)
+
+		# Populating result dict
+		resultDict = []
+		for i in diagnosisList:
+			for key in diseaseDict:
+				if i == key:
+					resultDict.append({str("disease"):str(key), str("symptoms"): str(diseaseDict[key])})
+
+		# Removing matches between resultDict and exactDiagnosis
+		for i in exactDiagnosis:
+			if i in resultDict:
+				resultDict.remove(i)
+
+
+		# Creating dict for selected items
+		selectedDict = []
+		for i in symptomList:
+			selectedDict.append({str("selectedItem"): str(i)})
+
+		# Special case for LAM
+		if str("Cysts-Thin Wall") in symptomList and patientClinicProfile.sex == "FEMALE" and int(patientClinicProfile.age) < 40:
+			exactDiagnosis.append({str("disease"):str("LAM"), str("symptoms"): str("Cysts-Thin Wall; Premenopausal Female")}) 
+
+
+		response = render(request, "viewdiagnosis.html", {'possibleDiagnosis': resultDict, 'selectedSymptom': selectedDict, 'exactDiagnosis': exactDiagnosis})	
+		return response
+	else:
+		response = render(request, "nodiagnosis.html")
+		return response	
+	
 
 
 

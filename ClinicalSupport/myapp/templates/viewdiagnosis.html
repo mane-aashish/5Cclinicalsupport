@@ -10,12 +10,6 @@
 
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	
-	<script type="text/javascript">
-		function goBack() {
-			window.history.back();
-		}
-	</script>
 
 </head>
 <body>
@@ -47,28 +41,6 @@
 	</div>	
 
 	<div class = "row" name = "possibleDiagnosis">
-			
-<!-- 		<div class = "col-xs-6"  style="margin-left:50px;">
-	
-			{% if possibleDiagnosis  %}
-		
-				<h4> Possible Diagnosis </h4> <br>
-
-					{% for item in  possibleDiagnosis %}
-			
-						<p> Disease = {{item.disease}} <br>
-						Symptoms = {{item.symptoms}} <br><br>
-						</p>
-
-						{% endfor %}
-			
-			{% else %}			
-				<h2> Incolclusive diagnosis </h2>
-		
-
-			{% endif %}
-
-			</div> -->
 
 		<div class = "col-xs-6"  style="margin-left:50px;">
 			
@@ -123,7 +95,6 @@
 				<h2> Inconclusive Diagnosis </h2>
 			{% endif %}				
 			<br><br>
-			<button class="btn btn-primary" id="back" onclick="goBack()">Edit Findings</button>
 		</div>	
 		
 		
