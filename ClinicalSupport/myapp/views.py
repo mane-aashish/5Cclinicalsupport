@@ -64,6 +64,7 @@ def storeClinicInfo(request, rid):
 	
 	if request.method == 'POST':
 		sex = request.POST.get('sex', "MALE")
+		#sex = request.POST.getlist('sex')
 		age = request.POST.get('age', "25")
 		smokingHistory = request.POST.get('smoking', 'N')
 		allergies = request.POST.get('allergies', "NIL")
