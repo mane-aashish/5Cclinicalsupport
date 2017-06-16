@@ -19,13 +19,15 @@ from models import *
 
 	Entries should be in the form Disease: Symptoms """
 
+# changed entry = "Pulmonary Edema": "Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy; Septal Thickening-Smooth; Heart-Large"
+
 diseaseDict = {
-	"UIP": "Honeycombing; Fibrosis-Basal; Fibrosis-Subpleural",
-	"NSIP": "Septal Thickening-Irregular; Fibrosis-Mixed; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy",
+	"UIP": "Honeycombing; Fibrosis-Basal; Fibrosis-Subpleural; Collagen Vascular Disease; Skin Rash/Arthritis/Joint Pain",
+	"NSIP": "Septal Thickening-Irregular; Fibrosis-Mixed; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy; Collagen Vascular Disease; Skin Rash/Arthritis/Joint Pain",
 	"Hypersensitivity Pneumonitis": "Allergies; Nodules-Centrilobular; Air Trapping",
 	"Rb -ILD": "Smoking; Nodules-Centrilobular; Tree in Bud Lesion",
 	"DIP": "Smoking; Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy",
-	"Pulmonary Edema": "Ground Glass-Focal; Ground Glass-Diffuse; Ground Glass-Patchy; Septal Thickening-Smooth; Heart-Large",
+	"Pulmonary Edema": "Crazy Paving; Heart-Large",
 	"COP": "Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular; Reverse Halo",
 	"Eosinophilic Pneumonia": "Eosinophilia; Consolidation-Subpleural; Consolidation-Peripheral; Consolidation-Peribronchovascular",
 	"Invasive Aspergillosis": "Halo Sign",
@@ -141,6 +143,10 @@ def viewChestClinicInfo(request, rid):
 			symptomList.append(str("Eosinophilia"))
 		if patientProfile.mining == 'Y':
 			symptomList.append(str("Mining/Tunnel Work"))
+		if patientProfile.cvd == 'Y':
+			symptomList.append(str("Collagen Vascular Disease"))
+		if patientProfile.skinrash == 'Y':
+			symptomList.append(str("Skin Rash/Arthritis/Joint Pain"))
 
 		# Radiologist findings
 		honeycombing = request.POST.get('honeycombing', 'N')
@@ -322,6 +328,10 @@ def viewChestDiagnosis(request, rid):
 			symptomList.append(str("Eosinophilia"))
 		if patientClinicProfile.mining == 'Y':
 			symptomList.append(str("Mining/Tunnel Work"))
+		if patientClinicProfile.cvd == 'Y':
+			symptomList.append(str("Collagen Vascular Disease"))
+		if patientClinicProfile.skinrash == 'Y':
+			symptomList.append(str("Skin Rash/Arthritis/Joint Pain"))
 
 		# Retrieving radiologist information
 		patientRadioProfile = radioUserProfileChest.objects.get(uid=uniqueID)
