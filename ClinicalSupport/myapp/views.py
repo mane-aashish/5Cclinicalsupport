@@ -130,23 +130,31 @@ def viewChestClinicInfo(request, rid):
 
 	if request.method == 'POST':
 		symptomList = []
+		symptomList2 = []
 
 		#  Retrieving clinical observations
 		patientProfile = clinicUserProfile.objects.get(uid=request.session['radio-uid'])
 		if patientProfile.smokingHistory == 'Y':
 			symptomList.append(str("Smoking"))
+			symptomList2.append(str("Smoking"))
 		if patientProfile.allergies != "NIL":
 			symptomList.append(str("Allergies"))
+			symptomList2.append(str("Allergies"))
 		if patientProfile.hiv == 'Y':
 			symptomList.append(str("HIV/Immunocompromised"))
+			symptomList2.append(str("HIV/Immunocompromised"))
 		if patientProfile.eosinophilia == 'Y':
 			symptomList.append(str("Eosinophilia"))
+			symptomList2.append(str("Eosinophilia"))
 		if patientProfile.mining == 'Y':
 			symptomList.append(str("Mining/Tunnel Work"))
+			symptomList2.append(str("Mining/Tunnel Work"))
 		if patientProfile.cvd == 'Y':
 			symptomList.append(str("Collagen Vascular Disease"))
+			symptomList2.append(str("Collagen Vascular Disease"))
 		if patientProfile.skinrash == 'Y':
 			symptomList.append(str("Skin Rash/Arthritis/Joint Pain"))
+			symptomList2.append(str("Skin Rash/Arthritis/Joint Pain"))
 
 		# Radiologist findings
 		honeycombing = request.POST.get('honeycombing', 'N')
@@ -235,7 +243,7 @@ def viewChestClinicInfo(request, rid):
 
 		# Populating list of diagnosis
 		diagnosisList = []
-		for i in symptomList:
+		for i in symptomList2:
 			for key in diseaseDict:
 				if i in diseaseDict[key]:
 					diagnosisList.append(str(key))
@@ -310,6 +318,7 @@ def viewChestDiagnosis(request, rid):
 	uniqueID = str(rid)
 	# Initializing symptom list
 	symptomList = []
+	symptomList2 = []
 
 	# Checking if required information has been recorded
 	profileClinicPresent = radioUserProfileChest.objects.filter(Q(uid=uniqueID))
@@ -320,18 +329,25 @@ def viewChestDiagnosis(request, rid):
 		patientClinicProfile = clinicUserProfile.objects.get(uid=uniqueID)
 		if patientClinicProfile.smokingHistory == 'Y':
 			symptomList.append(str("Smoking"))
+			symptomList2.append(str("Smoking"))
 		if patientClinicProfile.allergies != "NIL":
 			symptomList.append(str("Allergies"))
+			symptomList2.append(str("Allergies"))
 		if patientClinicProfile.hiv == 'Y':
 			symptomList.append(str("HIV/Immunocompromised"))
+			symptomList2.append(str("HIV/Immunocompromised"))
 		if patientClinicProfile.eosinophilia == 'Y':
 			symptomList.append(str("Eosinophilia"))
+			symptomList2.append(str("Eosinophilia"))
 		if patientClinicProfile.mining == 'Y':
 			symptomList.append(str("Mining/Tunnel Work"))
+			symptomList2.append(str("Mining/Tunnel Work"))
 		if patientClinicProfile.cvd == 'Y':
 			symptomList.append(str("Collagen Vascular Disease"))
+			symptomList2.append(str("Collagen Vascular Disease"))
 		if patientClinicProfile.skinrash == 'Y':
 			symptomList.append(str("Skin Rash/Arthritis/Joint Pain"))
+			symptomList2.append(str("Skin Rash/Arthritis/Joint Pain"))
 
 		# Retrieving radiologist information
 		patientRadioProfile = radioUserProfileChest.objects.get(uid=uniqueID)
@@ -395,7 +411,7 @@ def viewChestDiagnosis(request, rid):
 
 		# Populating list of diagnosis
 		diagnosisList = []
-		for i in symptomList:
+		for i in symptomList2:
 			for key in diseaseDict:
 				if i in diseaseDict[key]:
 					diagnosisList.append(str(key))
