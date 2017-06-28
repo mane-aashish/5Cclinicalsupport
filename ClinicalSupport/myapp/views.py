@@ -166,9 +166,14 @@ def viewChestClinicInfo(request, rid):
 		groundGlass = request.POST.get('groundGlass', "NULL")
 		if groundGlass != "NULL":
 			symptomList.append(str(groundGlass))
-		consolidation = request.POST.get('consolidation', "NULL")
-		if consolidation != "NULL":
-			symptomList.append(str(consolidation))
+		#consolidation = request.POST.get('consolidation', "NULL")
+		consolidation = request.POST.getlist('consolidation')
+		consolidationDB = ";".join(consolidation)
+		if len(consolidation) != 0:
+			for i in consolidation:
+				symptomList.append(str(i))
+		#Consolidation-Iobar
+		print symptomList
 		fibrosis = request.POST.get('fibrosis', "NULL")
 		if fibrosis != "NULL":
 			symptomList.append(str(fibrosis))
@@ -283,7 +288,7 @@ def viewChestClinicInfo(request, rid):
 			profile.honeycombing=honeycombing
 			profile.septal=septal
 			profile.groundGlass=groundGlass
-			profile.consolidation=consolidation
+			profile.consolidation=consolidationDB
 			profile.fibrosis=fibrosis
 			profile.nodules=nodules
 			profile.massLesion=massLesion
@@ -304,7 +309,7 @@ def viewChestClinicInfo(request, rid):
 			profile.heart=heart
 			profile.save()
 		else:
-			userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidation, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
+			userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidationDB, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
 			userProfile.save()
 		
 		
@@ -358,7 +363,9 @@ def viewChestDiagnosis(request, rid):
 		if patientRadioProfile.groundGlass != "NULL":
 			symptomList.append(str(patientRadioProfile.groundGlass))
 		if patientRadioProfile.consolidation != "NULL":
-			symptomList.append(str(patientRadioProfile.consolidation))
+			x = patientRadioProfile.consolidation.split(';')
+			for i in x:
+				symptomList.append(str(i))
 		if patientRadioProfile.fibrosis != "NULL":
 			symptomList.append(str(patientRadioProfile.fibrosis))
 		if patientRadioProfile.nodules != "NULL":
