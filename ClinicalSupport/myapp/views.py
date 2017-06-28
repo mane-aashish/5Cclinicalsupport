@@ -172,6 +172,8 @@ def viewChestClinicInfo(request, rid):
 		if len(consolidation) != 0:
 			for i in consolidation:
 				symptomList.append(str(i))
+		else:
+			consolidationDB="NULL"
 		#Consolidation-Iobar
 		print symptomList
 		fibrosis = request.POST.get('fibrosis', "NULL")
@@ -183,6 +185,8 @@ def viewChestClinicInfo(request, rid):
 		if len(nodules) != 0:
 			for i in nodules:
 				symptomList.append(str(i))
+		else:
+			nodulesDB="NULL"
 		massLesion = request.POST.get('massLesion', "N")
 		if massLesion != "N":
 			symptomList.append(str("Mass Lesion"))
