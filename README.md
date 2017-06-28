@@ -2,6 +2,10 @@
 
 Clinical Support Module for 5C Network
 
+# Installation
+
+- Navigate to the directory with `requirements.txt` file.
+- Run `pip install -r requirements.txt`
 
 # Usage
 
