@@ -177,9 +177,12 @@ def viewChestClinicInfo(request, rid):
 		fibrosis = request.POST.get('fibrosis', "NULL")
 		if fibrosis != "NULL":
 			symptomList.append(str(fibrosis))
-		nodules = request.POST.get('nodules', "NULL")
-		if nodules != "NULL":
-			symptomList.append(str(nodules))
+		#nodules = request.POST.get('nodules', "NULL")
+		nodules = request.POST.getlist('nodules')
+		nodulesDB = ";".join(nodules)
+		if len(nodules) != 0:
+			for i in nodules:
+				symptomList.append(str(i))
 		massLesion = request.POST.get('massLesion', "N")
 		if massLesion != "N":
 			symptomList.append(str("Mass Lesion"))
@@ -290,7 +293,7 @@ def viewChestClinicInfo(request, rid):
 			profile.groundGlass=groundGlass
 			profile.consolidation=consolidationDB
 			profile.fibrosis=fibrosis
-			profile.nodules=nodules
+			profile.nodules=nodulesDB
 			profile.massLesion=massLesion
 			profile.treeInBudLesion=treeInBudLesion
 			profile.airTrapping=airTrapping
@@ -309,7 +312,7 @@ def viewChestClinicInfo(request, rid):
 			profile.heart=heart
 			profile.save()
 		else:
-			userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidationDB, fibrosis=fibrosis, nodules=nodules, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
+			userProfile = radioUserProfileChest.objects.create(uid=uniqueID, honeycombing=honeycombing, septal=septal, groundGlass=groundGlass, consolidation=consolidationDB, fibrosis=fibrosis, nodules=nodulesDB, massLesion=massLesion, treeInBudLesion=treeInBudLesion, airTrapping=airTrapping, mosaicAttenuation=mosaicAttenuation, bronchiectasis=bronchiectasis, cavity=cavity, cysts=cysts, emphysema=emphysema, lymphNodes=lymphNodes, pleuralEffusion=pleuralEffusion, pleuralThickening=pleuralThickening, crazyPaving=crazyPaving, haloSign=haloSign, reverseHalo=reverseHalo, fat=fat, heart=heart)
 			userProfile.save()
 		
 		
@@ -369,7 +372,9 @@ def viewChestDiagnosis(request, rid):
 		if patientRadioProfile.fibrosis != "NULL":
 			symptomList.append(str(patientRadioProfile.fibrosis))
 		if patientRadioProfile.nodules != "NULL":
-			symptomList.append(str(patientRadioProfile.nodules))
+			y = patientRadioProfile.nodules.split(';')
+			for i in y:
+				symptomList.append(str(i))
 		if patientRadioProfile.massLesion != "N":
 			symptomList.append(str("Mass Lesion"))
 		if patientRadioProfile.treeInBudLesion != "N":
