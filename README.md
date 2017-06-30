@@ -13,6 +13,7 @@ Clinical Support Module for 5C Network
 - Run `python manage.py runserver`. Development server will be set up at localhost:8000
 - Go to `localhost:8000/chest/clinic/<scan ID>` to enter clinical observations.
 - Go to `localhost:8000/chest/radio/<scan ID>` to enter radiologist findings and compute diagnosis.
+- Go to `localhost:8000/chest/diagnosis/<scan ID>` to view the suggested diagnosis.
 
 # Code Description
 
