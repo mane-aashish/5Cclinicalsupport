@@ -7,6 +7,14 @@ Clinical Support Module for 5C Network
 - Navigate to the directory with `requirements.txt` file.
 - Run `pip install -r requirements.txt`
 
+While setting up the environment on local, it's always better to use python's virtual environments. Commands to install virtualenv can be found [here](http://www.pythonforbeginners.com/basics/how-to-use-python-virtualenv).
+
+Steps to activate a virtualenv:
+- Navigate to a directory where you want your virtual environment.
+- Run `virtualenv <Enter directory name>`.
+- From outside this directory, run `source <created directory name>/bin/activate`.
+- Then follow the installation steps mentioned above.
+
 # Usage
 
 - Navigate the to the directory with the `manage.py` file.
