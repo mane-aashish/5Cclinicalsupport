@@ -29,4 +29,9 @@ Steps to activate a virtualenv:
 - `views.py` contains the logic to implementing the decision support. Documentation is provided in the file. 
 - `models.py` contains the DB schema. Refer Django migrations to reflect changes to the DB schema.
 
-  
+# Making Changes to DB 
+
+When any change has been made to the DB, the changes need to be manually migrated before running the code. To migrate DB changes:
+- Go to directory with `manage.py` file.
+- Run `python manage.py makemigrations`.
+- Run `python manage.py migrate`.
